@@ -1,18 +1,27 @@
 ﻿using System;
+using Clinic.Tests.DataSeed;
 using Clinic.Models;
 using Clinic.Models.Entities;
-using Microsoft.VisualBasic;
 
-namespace Clinic.Tests
+namespace Clinic.Tests;
+
+/// <summary>
+/// A set of integration tests verifying the business logic of the clinic system.
+/// Uses the <see cref="ClinicDataSeed"/> fixture to initialize test data.
+/// All tests validate filtering and aggregation logic for doctors, patients, and appointments.
+/// </summary>
+public class ClinicTest(ClinicDataSeed clinicDataSeed) : IClassFixture<ClinicDataSeed>
 {
-    public class ClinicTests
-    {
-        public readonly ClinicInfo clinic = new ClinicDataSeed().clinic;
+    private readonly ClinicInfo clinic = clinicDataSeed.clinic;
 
-        [Fact]
-        public void GetDoctors_ReturnsDoctorsWith10OrMoreYearsOfExperience()
-        {
-            List<String> DoctorsWith10OrMoreYearsOfExperience = new List<String>{
+    /// <summary>
+    /// Verifies that only doctors with 10 or more years of experience are returned.
+    /// Compares the full names from the result with the expected list.
+    /// </summary>
+    [Fact]
+    public void GetDoctors_ReturnsDoctorsWith10OrMoreYearsOfExperience()
+    {
+        var doctorsWith10OrMoreYearsOfExperience = new List<string> {
                 "Смирнов Андрей Иванович",
                 "Петров Сергей Викторович",
                 "Орлова Елена Александровна",
@@ -21,102 +30,102 @@ namespace Clinic.Tests
                 "Григорьева Наталья Валерьевна"
             };
 
-            var res_doctors = clinic.Doctors.Where(d => d.ExperienceYears >= 10).ToList();
-            var resDoctorsWith10OrMoreYearsOfExperience = new List<String>();
+        var resDoctors = clinic.Doctors
+            .Where(d => d.ExperienceYears >= 10)
+            .Select(d => d.GetFullName())
+            .ToList();
 
-            foreach (var doctor in res_doctors)
-            {
-                resDoctorsWith10OrMoreYearsOfExperience.Add(doctor.GetFullName());
-            }
+        Assert.Equal(doctorsWith10OrMoreYearsOfExperience, resDoctors);
+    }
 
-            Assert.Equal(DoctorsWith10OrMoreYearsOfExperience, resDoctorsWith10OrMoreYearsOfExperience);
-        }
-
-        [Fact]
-        public void GetTargerDoctor_ReturnsPatientsWhoHaveAppointmentWithTargetDoctor()
-        {
-            Doctor targetDoctor = clinic.Doctors.First(d => d.LastName == "Смирнов" && d.FirstName == "Андрей");
-            List<String> patientsWhoHaveAppointmentWithTargetDocor = [
+    /// <summary>
+    /// Ensures that all patients who have appointments with the target doctor (Id = 1) are returned.
+    /// Patients are selected uniquely and sorted by full name.
+    /// </summary>
+    [Fact]
+    public void GetTargerDoctor_ReturnsPatientsWhoHaveAppointmentWithTargetDoctor()
+    {
+        var targetDoctor = clinic.Doctors.First(d => d.Id == 1);
+        var patientsWhoHaveAppointmentWithTargetDocor = new List<string> {
                 "Иванов Иван Иванович",
                 "Сидоров Алексей Петрович"
-            ];
+            };
 
-            var res_patients = clinic.Appointments
-                .Where(d => d.Doctor == targetDoctor)
-                .Select(p => p.Patient)
-                .Distinct()
-                .OrderBy(n => n.LastName)
-                .ThenBy(n => n.FirstName)
-                .ThenBy(n => n.Patronymic)
-                .ToList();
+        var resPatients = clinic.Appointments
+            .Where(d => d.Doctor == targetDoctor)
+            .Select(p => p.Patient)
+            .Distinct()
+            .Select(p => p.GetFullName())
+            .OrderBy(n => n)
+            .ToList();
 
-            var result = new List<String>();
+        Assert.Equal(patientsWhoHaveAppointmentWithTargetDocor, resPatients);
+    }
 
-            foreach (var patient in res_patients)
-            {
-                result.Add(patient.GetFullName());
-            }
+    /// <summary>
+    /// Counts the number of return visits (IsReturnVisit = true) in the last month
+    /// relative to September 4, 2025. Expected count: 7.
+    /// </summary>
+    [Fact]
+    public void GetAppointmentInTheLastMonths_ReturnsRepeatedAppointment()
+    {
+        var countRepeatedAppointments = 7;
 
-            Assert.Equal(patientsWhoHaveAppointmentWithTargetDocor, result);
-        }
+        var currentDate = new DateTime(2025, 9, 4);
+        var lastMonth = currentDate.AddMonths(-1);
 
-        [Fact]
-        public void GetAppointmentInTheLastMonths_ReturnsRepeatedAppointment()
-        {
-            var CountRepeatedAppointments = 6;
+        var resCount = clinic.Appointments
+            .Where(a => a.DateTime >= lastMonth && a.IsReturnVisit)
+            .Count();
 
-            DateTime now = DateTime.Now;
-            DateTime lastMonth = now.AddMonths(-1);
+        Assert.Equal(countRepeatedAppointments, resCount);
+    }
 
-            var resCountRepeatedAppointments = clinic.Appointments
-                .Where(a => a.DateTime >= lastMonth && a.IsReturnVisit)
-                .Count();
-
-            Assert.Equal(CountRepeatedAppointments, resCountRepeatedAppointments);
-        }
-
-        [Fact]
-        public void GetPationsOver30_ReturnsPationsWhoHaveAppointmentWithSeveralDoctors()
-        {
-            var PationsWhoHaveAppointmentWithSeveralDoctors = new List<String>
+    /// <summary>
+    /// Finds patients over 30 years old (as of November 4, 2025) who have appointments
+    /// with multiple doctors. Results are ordered by birth date (oldest first).
+    /// </summary>
+    [Fact]
+    public void GetPationsOver30_ReturnsPationsWhoHaveAppointmentWithSeveralDoctors()
+    {
+        var pationsWhoHaveAppointmentWithSeveralDoctors = new List<string>
             {
                 "Морозов Сергей Викторович",
                 "Сидоров Алексей Петрович",
                 "Петрова Мария Сергеевна"
             };
 
-            var currentDate = DateTime.Now;
-            var age30 = currentDate.AddYears(-30);
+        var currentDate = new DateOnly(2025, 11, 4);
+        var age30 = currentDate.AddYears(-30);
 
-            var patients = clinic.Patients
-                .Where(a => a.BirthDate <= age30)
-                .Where(p => clinic.Appointments.Count(a => a.Patient.PassportNumber == p.PassportNumber) > 1)
-                .OrderBy(d => d.BirthDate)
-                .ToList();
+        var resPatients = clinic.Patients
+            .Where(a => a.BirthDate <= age30)
+            .Where(p => clinic.Appointments.Count(a => a.Patient.PassportNumber == p.PassportNumber) > 1)
+            .OrderBy(d => d.BirthDate)
+            .Select(p => p.GetFullName())
+            .ToList();
 
-            var resPationsWhoHaveAppointmentWithSeveralDoctors = new List<String>();
-            foreach (var patient in patients)
-            {
-                resPationsWhoHaveAppointmentWithSeveralDoctors.Add(patient.GetFullName());
-            }
-            Assert.Equal(PationsWhoHaveAppointmentWithSeveralDoctors, resPationsWhoHaveAppointmentWithSeveralDoctors);
-        }
-        [Fact]
-        public void GetTargetRoom_ReturnsCountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom()
-        {
-            var CountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom = 3;
+        Assert.Equal(pationsWhoHaveAppointmentWithSeveralDoctors, resPatients);
+    }
 
-            var targetRoom = 303;
-            DateTime now = DateTime.Now;
-            DateTime lastMonth = now.AddMonths(-1);
+    /// <summary>
+    /// Counts the number of appointments in room 303 during the last month
+    /// relative to September 4, 2025.. Expected count: 3.
+    /// </summary>
+    [Fact]
+    public void GetTargetRoom_ReturnsCountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom()
+    {
+        var countAppointmentsInTheLastMonthThatTookPlaceInTargetRoom = 3;
 
+        var targetRoom = 303;
+        var currentDate = new DateTime(2025, 9, 4);
+        var lastMonth = currentDate.AddMonths(-1);
 
-            int resCountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom = clinic.Appointments
-                .Where(a => a.RoomNumber == targetRoom &&
-                       a.DateTime >= lastMonth)
-                .Count();
+        var resCount = clinic.Appointments
+            .Where(a => a.RoomNumber == targetRoom &&
+                   a.DateTime >= lastMonth)
+            .Count();
 
-            Assert.Equal(CountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom, resCountAppointmentsInTheLastMonthThatTookPlaceInTargetRoom);
-        }
+        Assert.Equal(countAppointmentsInTheLastMonthThatTookPlaceInTargetRoom, resCount);
     }
 }
