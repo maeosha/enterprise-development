@@ -1,29 +1,30 @@
+using Clinic.Models.Common;
 using Clinic.Models.Enums;
 
-namespace Clinic.Models.Entities
+namespace Clinic.Models.Entities;
+
+/// <summary>
+/// Represents a patient entity with personal and medical information.
+/// </summary>
+public class Patient : PersonInfo
 {
-    public class Patient
-    {
-        public required string PassportNumber { get; set; }
-        public required string LastName { get; set; }
-        public required string FirstName { get; set; }
-        public string? Patronymic { get; set; }
-        public required Gender Gender { get; set; }
-        public required DateTime BirthDate { get; set; }
-        public required string Address { get; set; }
-        public required BloodGroup BloodGroup { get; set; }
-        public required RhesusFactor RhesusFactor { get; set; }
-        public required string PhoneNumber { get; set; }
+    /// <summary>
+    /// Gets or sets the patient's address.
+    /// </summary>
+    required public string Address { get; set; }
 
-        public Patient() { }
+    /// <summary>
+    /// Gets or sets the patient's blood group.
+    /// </summary>
+    required public BloodGroup BloodGroup { get; set; }
 
-        public string GetFullName()
-        {
-            if (Patronymic == null)
-            {
-                return $"{LastName} {FirstName}";
-            }
-            return $"{LastName} {FirstName} {Patronymic}";
-        }
-    }
+    /// <summary>
+    /// Gets or sets the patient's rhesus factor.
+    /// </summary>
+    required public RhesusFactor RhesusFactor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the patient's phone number.
+    /// </summary>
+    required public string PhoneNumber { get; set; }
 }

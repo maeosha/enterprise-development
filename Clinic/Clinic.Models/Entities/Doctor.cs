@@ -1,25 +1,20 @@
-using System.Collections.Generic;
+using Clinic.Models.Common;
 using Clinic.Models.ReferenceBooks;
 
-namespace Clinic.Models.Entities
-{
-    public class Doctor
-    {
-        public required string PassportNumber { get; set; }  
-        public required string LastName { get; set; }        
-        public required string FirstName { get; set; }       
-        public string? Patronymic { get; set; }             
-        public required int BirthYear { get; set; }         
-        public required List<Specialisation> Specializations { get; set; }
-        public required int ExperienceYears { get; set; } 
+namespace Clinic.Models.Entities;
 
-        public string GetFullName()
-        {
-            if (Patronymic == null)
-            {
-                return $"{LastName} {FirstName}";
-            }
-            return $"{LastName} {FirstName} {Patronymic}";
-        }
-    }
+/// <summary>
+/// Represents a doctor with personal and professional details.
+/// </summary>
+public class Doctor : PersonInfo
+{
+    /// <summary>
+    /// Gets or sets the list of medical specializations the doctor holds.
+    /// </summary>
+    required public List<Specialization> Specializations { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of years of experience the doctor has.
+    /// </summary>
+    required public int ExperienceYears { get; set; }
 }
