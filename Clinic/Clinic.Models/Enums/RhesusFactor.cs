@@ -1,8 +1,10 @@
-namespace Clinic.Models.Enums
+namespace Clinic.Models.Enums;
+
+/// <summary>
+/// Rhesus factor of the patient indicating presence of the RhD antigen.
+/// </summary>
+public enum RhesusFactor
 {
-    public enum RhesusFactor
-    {
-        Positive, 
-        Negative
-    }
+    Positive,
+    Negative
 }

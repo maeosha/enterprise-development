@@ -1,10 +1,12 @@
-namespace Clinic.Models.Enums
+namespace Clinic.Models.Enums;
+
+/// <summary>
+/// Represents the blood group categories used in the clinic domain.
+/// </summary>
+public enum BloodGroup
 {
-    public enum BloodGroup
-    {
-        First,   
-        Second, 
-        Third, 
-        Fourth
-    }
+    A,
+    B,
+    AB,
+    O
 }

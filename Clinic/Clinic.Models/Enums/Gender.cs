@@ -1,8 +1,10 @@
-namespace Clinic.Models.Enums
+namespace Clinic.Models.Enums;
+
+/// <summary>
+/// Represents the gender of a person.
+/// </summary>
+public enum Gender
 {
-    public enum Gender
-    {
-        Male,  
-        Female
-    }
+    Male,
+    Female
 }
