@@ -12,7 +12,7 @@ public class GetAppointmentDto
     public int DoctorId { get; set; }
     public string PatientFullName { get; set; } = null!;
     public string DoctorFullName { get; set; } = null!;
-    public DateOnly DateTime { get; set; }
+    public DateTime DateTime { get; set; }
     public int RoomNumber { get; set; }
     public bool IsReturnVisit { get; set; }
 }
