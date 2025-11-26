@@ -23,6 +23,7 @@ builder.Services.AddScoped<PatientServices>();
 builder.Services.AddScoped<DoctorServices>();
 builder.Services.AddScoped<SpecializationServices>();
 builder.Services.AddScoped<AppointmentServices>();
+builder.Services.AddScoped<TestServices>();
 
 var app = builder.Build();
 
