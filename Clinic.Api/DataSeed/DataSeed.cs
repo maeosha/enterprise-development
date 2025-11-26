@@ -352,7 +352,7 @@ public class DataSeed
             PatientFullName = patient1.GetFullName(),
             DoctorId = doctor1.Id,
             DoctorFullName = doctor1.GetFullName(),
-            DateTime = new DateTime(2025, 1, 10, 9, 0, 0),
+            DateTime = new DateTime(2024, 12, 15, 9, 0, 0), 
             RoomNumber = 101,
             IsReturnVisit = false
         };
@@ -365,7 +365,7 @@ public class DataSeed
             PatientFullName = patient2.GetFullName(),
             DoctorId = doctor2.Id,
             DoctorFullName = doctor2.GetFullName(),
-            DateTime = new DateTime(2025, 1, 10, 9, 30, 0),
+            DateTime = new DateTime(2024, 12, 16, 9, 30, 0), 
             RoomNumber = 102,
             IsReturnVisit = false
         };
@@ -500,5 +500,71 @@ public class DataSeed
             IsReturnVisit = false
         };
         _db.AddAppointment(appointment12);
+
+        var appointment13 = new Appointment
+        {
+            Id = 13,
+            PatientId = patient2.Id,
+            PatientFullName = patient2.GetFullName(),
+            DoctorId = doctor3.Id,
+            DoctorFullName = doctor3.GetFullName(),
+            DateTime = new DateTime(2024, 12, 18, 14, 0, 0), 
+            RoomNumber = 103,
+            IsReturnVisit = true
+        };
+        _db.AddAppointment(appointment13);
+
+        var appointment14 = new Appointment
+        {
+            Id = 14,
+            PatientId = patient4.Id,
+            PatientFullName = patient4.GetFullName(),
+            DoctorId = doctor5.Id,
+            DoctorFullName = doctor5.GetFullName(),
+            DateTime = new DateTime(2024, 12, 20, 10, 0, 0), 
+            RoomNumber = 201,
+            IsReturnVisit = false
+        };
+        _db.AddAppointment(appointment14);
+
+        var appointment15 = new Appointment
+        {
+            Id = 15,
+            PatientId = patient6.Id,
+            PatientFullName = patient6.GetFullName(),
+            DoctorId = doctor7.Id,
+            DoctorFullName = doctor7.GetFullName(),
+            DateTime = new DateTime(2024, 12, 22, 11, 0, 0), 
+            RoomNumber = 202,
+            IsReturnVisit = true
+        };
+        _db.AddAppointment(appointment15);
+
+        // Еще дополнительные повторные визиты
+        var appointment16 = new Appointment
+        {
+            Id = 16,
+            PatientId = patient8.Id,
+            PatientFullName = patient8.GetFullName(),
+            DoctorId = doctor9.Id,
+            DoctorFullName = doctor9.GetFullName(),
+            DateTime = new DateTime(2025, 1, 12, 15, 0, 0),
+            RoomNumber = 301,
+            IsReturnVisit = true
+        };
+        _db.AddAppointment(appointment16);
+
+        var appointment17 = new Appointment
+        {
+            Id = 17,
+            PatientId = patient5.Id,
+            PatientFullName = patient5.GetFullName(),
+            DoctorId = doctor4.Id,
+            DoctorFullName = doctor4.GetFullName(),
+            DateTime = new DateTime(2025, 1, 13, 16, 30, 0),
+            RoomNumber = 302,
+            IsReturnVisit = true
+        };
+        _db.AddAppointment(appointment17);
     }
 }
