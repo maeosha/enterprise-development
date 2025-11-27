@@ -22,9 +22,4 @@ public class Patient : PersonInfo
     /// Gets or sets the patient's rhesus factor.
     /// </summary>
     required public RhesusFactor RhesusFactor { get; set; }
-
-    /// <summary>
-    /// Gets or sets the patient's phone number.
-    /// </summary>
-    required public string PhoneNumber { get; set; }
 }

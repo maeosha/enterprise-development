@@ -38,6 +38,11 @@ public class PersonInfo
     public string? Patronymic { get; set; }
 
     /// <summary>
+    /// Gets or sets the patient's phone number.
+    /// </summary>
+    required public string PhoneNumber { get; set; }
+
+    /// <summary>
     /// Gets or sets the gender.
     /// </summary>
     required public Gender Gender { get; set; }

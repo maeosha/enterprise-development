@@ -1,5 +1,4 @@
 using Clinic.Models.Common;
-using Clinic.Models.ReferenceBooks;
 
 namespace Clinic.Models.Entities;
 

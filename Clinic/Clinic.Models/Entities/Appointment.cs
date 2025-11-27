@@ -6,14 +6,29 @@ namespace Clinic.Models.Entities;
 public class Appointment
 {
     /// <summary>
-    /// Gets or sets the patient for the appointment.
+    /// Gets or sets the unique identifier for the appointment.
     /// </summary>
-    required public Patient Patient { get; set; }
+    required public int Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the doctor for the appointment.
+    /// Gets or sets the patient identifier for the appointment.
     /// </summary>
-    required public Doctor Doctor { get; set; }
+    required public int PatientId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the full name of the patient at the time of appointment.
+    /// </summary>
+    required public string PatientFullName { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the doctor identifier for the appointment.
+    /// </summary>
+    required public int DoctorId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the full name of the doctor at the time of appointment.
+    /// </summary>
+    required public string DoctorFullName { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the date and time of the appointment.
