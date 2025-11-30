@@ -46,8 +46,7 @@ public class MappingProfile : Profile
 
         CreateMap<CreateSpecializationDto, Specialization>();
 
-        CreateMap<Appointment, GetAppointmentDto>()
-            .ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DateTime)));
+        CreateMap<Appointment, GetAppointmentDto>();
 
         CreateMap<CreateAppointmentDto, Appointment>();
 
