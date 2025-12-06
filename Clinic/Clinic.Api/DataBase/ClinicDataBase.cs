@@ -66,6 +66,14 @@ public sealed class ClinicDataBase : IClinicDataBase
 
     public int SpecializationCount() => _specializations.Count;
 
+    public Specialization? UpdateSpecialization(int id, Specialization specialization){
+        if (!_specializations.ContainsKey(id)){
+            return null;
+        }
+        _specializations[id].Name = specialization.Name;
+        return _specializations[id];
+    }
+
 
     public Doctor? GetDoctor(int Id) => _doctors.GetValueOrDefault(Id);
 
