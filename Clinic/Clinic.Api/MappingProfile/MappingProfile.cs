@@ -44,6 +44,8 @@ public class MappingProfile : Profile
         CreateMap<Specialization, GetSpecializationDto>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.ToString()));
 
+        CreateMap<UpdateSpecializationDto, Specialization>();
+
         CreateMap<CreateSpecializationDto, Specialization>();
 
         CreateMap<Appointment, GetAppointmentDto>();

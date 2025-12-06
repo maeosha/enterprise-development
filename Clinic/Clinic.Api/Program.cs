@@ -3,6 +3,7 @@ using Clinic.Api.DataSeed;
 using Clinic.Api.MappingProfile;
 using Clinic.Api.Services;
 using Clinic.Api.Converter;
+using Clinic.Api.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +20,10 @@ builder.Services.AddSingleton<DataSeed>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<PatientServices>();
-builder.Services.AddScoped<DoctorServices>();
-builder.Services.AddScoped<SpecializationServices>();
-builder.Services.AddScoped<AppointmentServices>();
+builder.Services.AddScoped<IPatientServices, PatientServices>();
+builder.Services.AddScoped<IDoctorServices, DoctorServices>();
+builder.Services.AddScoped<ISpecializationServices, SpecializationServices>();
+builder.Services.AddScoped<IAppointmentServices, AppointmentServices>();
 builder.Services.AddScoped<TestServices>();
 
 var app = builder.Build();
