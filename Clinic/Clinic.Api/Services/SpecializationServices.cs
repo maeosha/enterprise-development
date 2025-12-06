@@ -2,6 +2,7 @@ using AutoMapper;
 using Clinic.Models.Entities;
 using Clinic.Api.DataBase;
 using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Services;
 
@@ -9,11 +10,11 @@ namespace Clinic.Api.Services;
 /// Service class for managing specialization-related operations in the Clinic API.
 /// Provides methods to create, retrieve, and delete specializations, and maps entity objects to DTOs.
 /// </summary>
-public class SpecializationServices
+public class SpecializationServices : ISpecializationServices
 {
     private readonly IClinicDataBase _db;
     private readonly IMapper _mapper;
-    private int specializationId;
+    private int _specializationId;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SpecializationServices"/> class.
@@ -25,14 +26,14 @@ public class SpecializationServices
     {
         _db = db;
         _mapper = mapper;
-        specializationId = _db.SpecializationCount() + 1;
+        _specializationId = _db.SpecializationCount() + 1;
     }
 
     /// <summary>
     /// Retrieves all specializations from the database and maps them to DTOs.
     /// </summary>
     /// <returns>A collection of <see cref="GetSpecializationDto"/> representing specializations.</returns>
-    public IReadOnlyCollection<GetSpecializationDto> GetAllSpecializations()
+    public IReadOnlyCollection<GetSpecializationDto> GetAll()
     {
         var specializations = _db.GetAllSpecializations();
         var specializationDtos = _mapper.Map<IReadOnlyCollection<GetSpecializationDto>>(specializations);
@@ -40,14 +41,31 @@ public class SpecializationServices
     }
 
     /// <summary>
+    /// Updates an existing specialization with the given identifier.
+    /// </summary>
+    /// <param name="id">The identifier of the specialization to update.</param>
+    /// <param name="updateSpecializationDto">The DTO containing updated specialization data.</param>
+    /// <returns>The updated specialization as a DTO if successful; otherwise, null.</returns>
+    public GetSpecializationDto? Update(int id, UpdateSpecializationDto updateSpecializationDto)
+    {
+        var specialization = _mapper.Map<Specialization>(updateSpecializationDto);
+        var updatedSpecialization = _db.UpdateSpecialization(id, specialization);
+        if (updatedSpecialization == null)
+        {
+            return null;
+        }
+        return _mapper.Map<GetSpecializationDto>(updatedSpecialization);
+    }
+
+    /// <summary>
     /// Creates a new specialization entity in the database.
     /// </summary>
     /// <param name="createSpecializationDto">The DTO containing specialization creation data.</param>
     /// <returns>The created specialization as a <see cref="GetSpecializationDto"/> if successful; otherwise, null.</returns>
-    public GetSpecializationDto? CreateSpecialization(CreateSpecializationDto createSpecializationDto)
+    public GetSpecializationDto? Create(CreateSpecializationDto createSpecializationDto)
     {
         var specialization = _mapper.Map<Specialization>(createSpecializationDto);
-        specialization.Id = specializationId;
+        specialization.Id = _specializationId;
 
         if (!_db.AddSpecialization(specialization))
         {
@@ -55,9 +73,9 @@ public class SpecializationServices
         }
 
         var specializationDto = _mapper.Map<GetSpecializationDto>(specialization);
-        specializationDto.Id = specializationId;
+        specializationDto.Id = _specializationId;
 
-        specializationId++;
+        _specializationId++;
 
         return specializationDto;
     }
@@ -67,7 +85,7 @@ public class SpecializationServices
     /// </summary>
     /// <param name="id">The specialization identifier.</param>
     /// <returns>A <see cref="GetSpecializationDto"/> if found; otherwise, null.</returns>
-    public GetSpecializationDto? GetSpecialization(int id)
+    public GetSpecializationDto? Get(int id)
     {
         var specialization = _db.GetSpecialization(id);
         if (specialization == null)
@@ -82,7 +100,7 @@ public class SpecializationServices
     /// </summary>
     /// <param name="id">The specialization identifier.</param>
     /// <returns>True if the specialization was deleted; otherwise, false.</returns>
-    public bool DeleteSpecialization(int id)
+    public bool Delete(int id)
     {
         return _db.RemoveSpecialization(id);
     }

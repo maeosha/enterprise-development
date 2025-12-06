@@ -2,6 +2,7 @@ using AutoMapper;
 using Clinic.Api.DataBase;
 using Clinic.Api.DTOs.PatientDto;
 using Clinic.Models.Entities;
+using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Services;
 
@@ -10,7 +11,7 @@ namespace Clinic.Api.Services;
 /// Provides methods for creating, retrieving, updating, and deleting patients,
 /// as well as listing all patients. Uses AutoMapper for entity-DTO mapping.
 /// </summary>
-public class PatientServices
+public class PatientServices : IPatientServices
 {
     private readonly IClinicDataBase _db;
     private readonly IMapper _mapper;
@@ -33,7 +34,7 @@ public class PatientServices
     /// Retrieves all patients from the database and maps them to DTOs.
     /// </summary>
     /// <returns>A collection of <see cref="GetPatientDto"/> representing all patients.</returns>
-    public IReadOnlyCollection<GetPatientDto> GetAllPatients()
+    public IReadOnlyCollection<GetPatientDto> GetAll()
     {
         var patients = _db.GetAllPatients();
         var patientsDto = _mapper.Map<IReadOnlyCollection<GetPatientDto>>(patients);
@@ -45,7 +46,7 @@ public class PatientServices
     /// </summary>
     /// <param name="patientCreateDto">The DTO containing patient creation data.</param>
     /// <returns>The created patient as a <see cref="GetPatientDto"/> if successful; otherwise, null.</returns>
-    public GetPatientDto? CreatePatient(CreatePatientDto patientCreateDto)
+    public GetPatientDto? Create(CreatePatientDto patientCreateDto)
     {
         var patient = _mapper.Map<Patient>(patientCreateDto);
         patient.Id = _patientId;
@@ -64,7 +65,7 @@ public class PatientServices
     /// <param name="id">The identifier of the patient to update.</param>
     /// <param name="patientUpdateDto">The DTO containing updated patient data.</param>
     /// <returns>The updated patient as a <see cref="GetPatientDto"/> if successful; otherwise, null.</returns>
-    public GetPatientDto? UpdatePatient(int id, UpdatePatientDto patientUpdateDto)
+    public GetPatientDto? Update(int id, UpdatePatientDto patientUpdateDto)
     {
         var patient = _db.GetPatient(id);
         if (patient == null)
@@ -83,7 +84,7 @@ public class PatientServices
     /// </summary>
     /// <param name="id">The identifier of the patient to retrieve.</param>
     /// <returns>The patient as a <see cref="GetPatientDto"/> if found; otherwise, null.</returns>
-    public GetPatientDto? GetPatient(int id)
+    public GetPatientDto? Get(int id)
     {
         var patient = _db.GetPatient(id);
         if (patient == null)
@@ -99,7 +100,7 @@ public class PatientServices
     /// </summary>
     /// <param name="id">The identifier of the patient to delete.</param>
     /// <returns>True if the patient was deleted; otherwise, false.</returns>
-    public bool DeletePatient(int id)
+    public bool Delete(int id)
     {
         if (!_db.RemovePatient(id))
         {

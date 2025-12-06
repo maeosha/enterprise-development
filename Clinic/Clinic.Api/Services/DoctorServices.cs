@@ -2,6 +2,7 @@ using AutoMapper;
 using Clinic.Api.DataBase;
 using Clinic.Api.DTOs.DoctorDto;
 using Clinic.Models.Entities;
+using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Services;
 
@@ -11,11 +12,11 @@ namespace Clinic.Api.Services;
 /// as well as functions to get all doctors from the underlying database.
 /// Uses AutoMapper for mapping between entity and DTO objects.
 /// </summary>
-public class DoctorServices
+public class DoctorServices : IDoctorServices
 {
     private readonly IClinicDataBase _db;
     private readonly IMapper _mapper;
-    private int doctorId;
+    private int _doctorId;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DoctorServices"/> class.
@@ -27,14 +28,14 @@ public class DoctorServices
     {
         _db = db;
         _mapper = mapper;
-        doctorId = _db.DoctorCount() + 1;
+        _doctorId = _db.DoctorCount() + 1;
     }
 
     /// <summary>
     /// Retrieves all doctors from the database and maps them to DTOs.
     /// </summary>
     /// <returns>A collection of <see cref="GetDoctorDto"/> representing doctors.</returns>
-    public IReadOnlyCollection<GetDoctorDto> GetAllDoctors()
+    public IReadOnlyCollection<GetDoctorDto> GetAll()
     {
         var doctors = _db.GetAllDoctors();
         var doctorsDto = _mapper.Map<IReadOnlyCollection<GetDoctorDto>>(doctors);
@@ -46,10 +47,10 @@ public class DoctorServices
     /// </summary>
     /// <param name="createDoctorDto">The DTO containing doctor creation data.</param>
     /// <returns>The created doctor as a <see cref="GetDoctorDto"/> if successful; otherwise, null.</returns>
-    public GetDoctorDto? CreateDoctor(CreateDoctorDto createDoctorDto)
+    public GetDoctorDto? Create(CreateDoctorDto createDoctorDto)
     {
         var doctor = _mapper.Map<Doctor>(createDoctorDto);
-        doctor.Id = doctorId;
+        doctor.Id = _doctorId;
         if (!_db.AddDoctor(doctor))
         {
             return null;
@@ -62,7 +63,7 @@ public class DoctorServices
     /// </summary>
     /// <param name="id">The doctor identifier.</param>
     /// <returns>A <see cref="GetDoctorDto"/> if found; otherwise, null.</returns>
-    public GetDoctorDto? GetDoctor(int id)
+    public GetDoctorDto? Get(int id)
     {
         var doctor = _db.GetDoctor(id);
         if (doctor == null)
@@ -79,7 +80,7 @@ public class DoctorServices
     /// <param name="id">The doctor identifier.</param>
     /// <param name="updateDoctorDto">DTO with updated doctor details.</param>
     /// <returns>The updated doctor as a <see cref="GetDoctorDto"/> if successful; otherwise, null.</returns>
-    public GetDoctorDto? UpdateDoctor(int id, UpdateDoctorDto updateDoctorDto)
+    public GetDoctorDto? Update(int id, UpdateDoctorDto updateDoctorDto)
     {
         var doctor = _db.GetDoctor(id);
         if (doctor == null)
@@ -98,13 +99,13 @@ public class DoctorServices
     /// </summary>
     /// <param name="id">The doctor identifier to delete.</param>
     /// <returns>True if the doctor was successfully deleted; otherwise, false.</returns>
-    public bool DeleteDoctor(int id)
+    public bool Delete(int id)
     {
         if (!_db.RemoveDoctor(id))
         {
             return false;
         }
-        doctorId--;
+        _doctorId--;
         return true;
     }
 }

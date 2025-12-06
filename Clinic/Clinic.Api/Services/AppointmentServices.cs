@@ -2,6 +2,7 @@ using AutoMapper;
 using Clinic.Api.DataBase;
 using Clinic.Api.DTOs.Appointment;
 using Clinic.Models.Entities;
+using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Services;
 
@@ -10,7 +11,7 @@ namespace Clinic.Api.Services;
 /// Provides methods for creating, updating, retrieving, and deleting appointments.
 /// Handles mapping between DTOs and entity models, and interacts with the appointment database.
 /// </summary>
-public class AppointmentServices
+public class AppointmentServices : IAppointmentServices
 {
     private readonly IClinicDataBase _db;
     private readonly IMapper _mapper;
@@ -32,12 +33,17 @@ public class AppointmentServices
     /// Retrieves all appointments from the database.
     /// </summary>
     /// <returns>A read-only collection of appointment DTOs.</returns>
-    public IReadOnlyCollection<GetAppointmentDto> GetAllAppointments()
+    public IReadOnlyCollection<GetAppointmentDto> GetAll()
     {
         var appointments = _db.GetAllAppointments();
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
+    /// <summary>
+    /// Retrieves all appointments for a specific doctor.
+    /// </summary>
+    /// <param name="doctorId">The identifier of the doctor.</param>
+    /// <returns>A collection of appointment DTOs if the doctor exists; otherwise, null.</returns>
     public IReadOnlyCollection<GetAppointmentDto>? GetAppointmentsByDoctor(int doctorId)
     {
         var doctor = _db.GetDoctor(doctorId);
@@ -49,6 +55,11 @@ public class AppointmentServices
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
+    /// <summary>
+    /// Retrieves all appointments for a specific patient.
+    /// </summary>
+    /// <param name="patientId">The identifier of the patient.</param>
+    /// <returns>A collection of appointment DTOs if the patient exists; otherwise, null.</returns>
     public IReadOnlyCollection<GetAppointmentDto>? GetAppointmentsByPatient(int patientId)
     {
         var patient = _db.GetPatient(patientId);
@@ -60,13 +71,23 @@ public class AppointmentServices
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
-    public GetAppointmentDto? GetAppointment(int id)
+    /// <summary>
+    /// Retrieves a single appointment by its identifier.
+    /// </summary>
+    /// <param name="id">The identifier of the appointment to retrieve.</param>
+    /// <returns>The appointment as a DTO if found; otherwise, null.</returns>
+    public GetAppointmentDto? Get(int id)
     {
         var appointment = _db.GetAppointment(id);
         return appointment == null ? null : _mapper.Map<GetAppointmentDto>(appointment);
     }
 
-    public GetAppointmentDto? CreateAppointment(CreateAppointmentDto dto)
+    /// <summary>
+    /// Creates a new appointment entity in the database.
+    /// </summary>
+    /// <param name="dto">The DTO containing appointment creation data.</param>
+    /// <returns>The created appointment as a DTO if successful; otherwise, null.</returns>
+    public GetAppointmentDto? Create(CreateAppointmentDto dto)
     {
         var appointment = _mapper.Map<Appointment>(dto);
         appointment.Id = _appointmentId;
@@ -80,7 +101,13 @@ public class AppointmentServices
         return _mapper.Map<GetAppointmentDto>(appointment);
     }
 
-    public GetAppointmentDto? UpdateAppointment(int id, UpdateAppointmentDto dto)
+    /// <summary>
+    /// Updates an existing appointment with the given identifier.
+    /// </summary>
+    /// <param name="id">The identifier of the appointment to update.</param>
+    /// <param name="dto">The DTO containing updated appointment data.</param>
+    /// <returns>The updated appointment as a DTO if successful; otherwise, null.</returns>
+    public GetAppointmentDto? Update(int id, UpdateAppointmentDto dto)
     {
         var appointment = _db.GetAppointment(id);
         if (appointment == null)
@@ -94,7 +121,12 @@ public class AppointmentServices
         return _mapper.Map<GetAppointmentDto>(appointment);
     }
 
-    public bool DeleteAppointment(int id)
+    /// <summary>
+    /// Deletes an appointment from the database by its identifier.
+    /// </summary>
+    /// <param name="id">The identifier of the appointment to delete.</param>
+    /// <returns>True if the appointment was successfully deleted; otherwise, false.</returns>
+    public bool Delete(int id)
     {
         if (!_db.RemoveAppointment(id))
         {
