@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.Interfaces.Controllers;
 using Clinic.Api.Interfaces.Services;
 using Clinic.Api.DTOs.Appointment;
 
@@ -11,28 +10,23 @@ namespace Clinic.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/appointments")]
-public class AppointmentControllers : BaseControllers<GetAppointmentDto, CreateAppointmentDto, UpdateAppointmentDto, IAppointmentServices>, IAppointmentController
+public class AppointmentControllers(IAppointmentServices appointmentServices) : BaseControllers<GetAppointmentDto, CreateAppointmentDto, UpdateAppointmentDto>(appointmentServices)
 {
-    private readonly IAppointmentServices _appointmentServices;
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="AppointmentControllers"/>.
-    /// </summary>
-    /// <param name="service">Service for appointment operations.</param>
-    public AppointmentControllers(IAppointmentServices service) : base(service)
-    {
-        _appointmentServices = service;
-    }
-
     /// <summary>
     /// Gets all appointments for a specific doctor.
     /// </summary>
     /// <param name="doctorId">The doctor's id.</param>
     /// <returns>ActionResult containing appointments or NotFound if doctor not found.</returns>
     [HttpGet("doctor/{doctorId}")]
-    public IActionResult GetByDoctor(int doctorId)
+    [ProducesResponseType(typeof(IEnumerable<GetAppointmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<IEnumerable<GetAppointmentDto>> GetByDoctor(int doctorId)
     {
-        var appointments = _appointmentServices.GetAppointmentsByDoctor(doctorId);
+        var appointments = appointmentServices.GetAppointmentsByDoctor(doctorId);
+        if (appointments == null)
+        {
+            return NotFound("Doctor not found.");
+        }
         return Ok(appointments);
     }
 
@@ -42,9 +36,15 @@ public class AppointmentControllers : BaseControllers<GetAppointmentDto, CreateA
     /// <param name="patientId">The patient's id.</param>
     /// <returns>ActionResult containing appointments or NotFound if patient not found.</returns>
     [HttpGet("patient/{patientId}")]
-    public IActionResult GetByPatient(int patientId)
+    [ProducesResponseType(typeof(IEnumerable<GetAppointmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<IEnumerable<GetAppointmentDto>> GetByPatient(int patientId)
     {
-        var appointments = _appointmentServices.GetAppointmentsByPatient(patientId);
+        var appointments = appointmentServices.GetAppointmentsByPatient(patientId);
+        if (appointments == null)
+        {
+            return NotFound("Patient not found.");
+        }
         return Ok(appointments);
     }
 }
