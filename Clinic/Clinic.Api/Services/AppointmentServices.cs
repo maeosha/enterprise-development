@@ -1,5 +1,5 @@
 using AutoMapper;
-using Clinic.Api.DataBase;
+using Clinic.DataBase.Interfaces;
 using Clinic.Api.DTOs.Appointment;
 using Clinic.Models.Entities;
 using Clinic.Api.Interfaces.Services;
@@ -13,20 +13,30 @@ namespace Clinic.Api.Services;
 /// </summary>
 public class AppointmentServices : IAppointmentServices
 {
-    private readonly IClinicDataBase _db;
+    private readonly IAppointmentDataBase _appointments;
+    private readonly IPatientDataBase _patients;
+    private readonly IDoctorDataBase _doctors;
     private readonly IMapper _mapper;
     private int _appointmentId;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppointmentServices"/> class.
     /// </summary>
-    /// <param name="db">The clinic database interface.</param>
+    /// <param name="appointments">The appointment database interface.</param>
+    /// <param name="patients">The patient database interface.</param>
+    /// <param name="doctors">The doctor database interface.</param>
     /// <param name="mapper">The AutoMapper interface for DTO and entity mapping.</param>
-    public AppointmentServices(IClinicDataBase db, IMapper mapper)
+    public AppointmentServices(
+        IAppointmentDataBase appointments,
+        IPatientDataBase patients,
+        IDoctorDataBase doctors,
+        IMapper mapper)
     {
-        _db = db;
+        _appointments = appointments;
+        _patients = patients;
+        _doctors = doctors;
         _mapper = mapper;
-        _appointmentId = _db.AppointmentCount() + 1;
+        _appointmentId = _appointments.AppointmentCount() + 1;
     }
 
     /// <summary>
@@ -35,7 +45,7 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>A read-only collection of appointment DTOs.</returns>
     public IReadOnlyCollection<GetAppointmentDto> GetAll()
     {
-        var appointments = _db.GetAllAppointments();
+        var appointments = _appointments.GetAllAppointments();
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
@@ -46,12 +56,12 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>A collection of appointment DTOs if the doctor exists; otherwise, null.</returns>
     public IReadOnlyCollection<GetAppointmentDto>? GetAppointmentsByDoctor(int doctorId)
     {
-        var doctor = _db.GetDoctor(doctorId);
+        var doctor = _doctors.GetDoctor(doctorId);
         if (doctor == null)
         {
             return null;
         }
-        var appointments = _db.GetAppointmentsByDoctor(doctorId);
+        var appointments = _appointments.GetAppointmentsByDoctor(doctorId);
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
@@ -62,12 +72,12 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>A collection of appointment DTOs if the patient exists; otherwise, null.</returns>
     public IReadOnlyCollection<GetAppointmentDto>? GetAppointmentsByPatient(int patientId)
     {
-        var patient = _db.GetPatient(patientId);
+        var patient = _patients.GetPatient(patientId);
         if (patient == null)
         {
             return null;
         }
-        var appointments = _db.GetAppointmentsByPatient(patientId);
+        var appointments = _appointments.GetAppointmentsByPatient(patientId);
         return _mapper.Map<IReadOnlyCollection<GetAppointmentDto>>(appointments);
     }
 
@@ -78,7 +88,7 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>The appointment as a DTO if found; otherwise, null.</returns>
     public GetAppointmentDto? Get(int id)
     {
-        var appointment = _db.GetAppointment(id);
+        var appointment = _appointments.GetAppointment(id);
         return appointment == null ? null : _mapper.Map<GetAppointmentDto>(appointment);
     }
 
@@ -92,7 +102,7 @@ public class AppointmentServices : IAppointmentServices
         var appointment = _mapper.Map<Appointment>(dto);
         appointment.Id = _appointmentId;
 
-        if (!_db.AddAppointment(appointment))
+        if (!_appointments.AddAppointment(appointment))
         {
             return null;
         }
@@ -109,14 +119,14 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>The updated appointment as a DTO if successful; otherwise, null.</returns>
     public GetAppointmentDto? Update(int id, UpdateAppointmentDto dto)
     {
-        var appointment = _db.GetAppointment(id);
+        var appointment = _appointments.GetAppointment(id);
         if (appointment == null)
         {
             return null;
         }
 
         _mapper.Map(dto, appointment);
-        _db.UpdateAppointment(appointment);
+        _appointments.UpdateAppointment(appointment);
 
         return _mapper.Map<GetAppointmentDto>(appointment);
     }
@@ -128,7 +138,7 @@ public class AppointmentServices : IAppointmentServices
     /// <returns>True if the appointment was successfully deleted; otherwise, false.</returns>
     public bool Delete(int id)
     {
-        if (!_db.RemoveAppointment(id))
+        if (!_appointments.RemoveAppointment(id))
         {
             return false;
         }

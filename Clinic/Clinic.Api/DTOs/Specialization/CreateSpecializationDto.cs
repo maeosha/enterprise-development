@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Clinic.Api.DTOs.SpecializationDto;
 
 /// <summary>
@@ -7,5 +5,8 @@ namespace Clinic.Api.DTOs.SpecializationDto;
 /// </summary>
 public class CreateSpecializationDto
 {
-    [Required]public string Name { get; set; } = null!;
+    /// <summary>
+    /// The name of the specialization to create.
+    /// </summary>
+    public required string Name { get; set; }
 }

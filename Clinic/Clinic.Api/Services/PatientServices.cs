@@ -1,5 +1,5 @@
 using AutoMapper;
-using Clinic.Api.DataBase;
+using Clinic.DataBase.Interfaces;
 using Clinic.Api.DTOs.PatientDto;
 using Clinic.Models.Entities;
 using Clinic.Api.Interfaces.Services;
@@ -13,7 +13,7 @@ namespace Clinic.Api.Services;
 /// </summary>
 public class PatientServices : IPatientServices
 {
-    private readonly IClinicDataBase _db;
+    private readonly IPatientDataBase _db;
     private readonly IMapper _mapper;
     private int _patientId;
 
@@ -23,7 +23,7 @@ public class PatientServices : IPatientServices
     /// </summary>
     /// <param name="db">The database service for patient operations.</param>
     /// <param name="mapper">The AutoMapper instance for mapping objects.</param>
-    public PatientServices(IClinicDataBase db, IMapper mapper)
+    public PatientServices(IPatientDataBase db, IMapper mapper)
     {
         _db = db;
         _mapper = mapper;

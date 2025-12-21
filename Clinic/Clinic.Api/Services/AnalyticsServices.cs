@@ -1,18 +1,27 @@
 using AutoMapper;
-using Clinic.Api.DataBase;
+using Clinic.DataBase.Interfaces;
 using Clinic.Api.DTOs.PatientDto;
 using Clinic.Api.DTOs.DoctorDto;
 using Clinic.Api.DTOs.Appointment;
 
 namespace Clinic.Api.Services;
 
-public class TestServices
+public class AnalyticsServices
 {
-    private readonly IClinicDataBase _db;
+    private readonly IPatientDataBase _patients;
+    private readonly IDoctorDataBase _doctors;
+    private readonly IAppointmentDataBase _appointments;
     private readonly IMapper _mapper;
     
-    public TestServices(IClinicDataBase db, IMapper mapper){
-        _db = db;
+    public AnalyticsServices(
+        IPatientDataBase patients,
+        IDoctorDataBase doctors,
+        IAppointmentDataBase appointments,
+        IMapper mapper)
+    {
+        _patients = patients;
+        _doctors = doctors;
+        _appointments = appointments;
         _mapper = mapper;
     }
 
@@ -20,7 +29,7 @@ public class TestServices
     /// Display information about all doctors with at least 10 years of experience.
     /// </summary>
     public IReadOnlyList<GetDoctorDto> GetDoctorsWithExperience10YearsOrMore(){
-        var doctors = _db.GetAllDoctors()
+        var doctors = _doctors.GetAllDoctors()
             .Where(d => d.ExperienceYears >= 10)
             .ToList();
         return _mapper.Map<IReadOnlyList<GetDoctorDto>>(doctors);
@@ -30,14 +39,18 @@ public class TestServices
     /// Display information about all patients scheduled to see a specified doctor, sorted by full name.
     /// </summary>
     public IReadOnlyList<GetPatientDto>? GetPatientsByDoctorOrderedByFullName(int doctorId){
-        var doctor = _db.GetDoctor(doctorId);
+        var doctor = _doctors.GetDoctor(doctorId);
         if (doctor == null)
         {
             return null;
         }
 
-        var appointments = _db.GetAppointmentsByDoctor(doctorId);
-        var patients = appointments.Where(a => a.DoctorId == doctorId).Select(a => _db.GetPatient(a.PatientId)).Distinct().ToList();
+        var appointments = _appointments.GetAppointmentsByDoctor(doctorId);
+        var patients = appointments
+            .Where(a => a.DoctorId == doctorId)
+            .Select(a => _patients.GetPatient(a.PatientId))
+            .Distinct()
+            .ToList();
 
         return _mapper.Map<IReadOnlyList<GetPatientDto>>(patients);
     }
@@ -50,7 +63,7 @@ public class TestServices
         var startOfLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
         var startOfCurrentMonth = startOfLastMonth.AddMonths(1);
 
-        var appointments = _db.GetAllAppointments()
+        var appointments = _appointments.GetAllAppointments()
             .Where(a => a.DateTime >= startOfLastMonth && 
                        a.DateTime < startOfCurrentMonth && 
                        a.IsReturnVisit)
@@ -65,7 +78,7 @@ public class TestServices
     public IReadOnlyList<GetPatientDto> GetPatientsOver30WithMultipleDoctorsOrderedByBirthDate(){
         var thirtyYearsAgo = DateOnly.FromDateTime(DateTime.Now.AddYears(-30));
         
-        var appointments = _db.GetAllAppointments();
+        var appointments = _appointments.GetAllAppointments();
         
         var patientsWithMultipleDoctors = appointments
             .GroupBy(a => a.PatientId)
@@ -74,7 +87,7 @@ public class TestServices
             .ToList();
 
         var patients = patientsWithMultipleDoctors
-            .Select(id => _db.GetPatient(id))
+            .Select(id => _patients.GetPatient(id))
             .Where(p => p != null && p.BirthDate < thirtyYearsAgo)
             .OrderBy(p => p!.BirthDate)
             .ToList();
@@ -90,7 +103,7 @@ public class TestServices
         var startOfMonth = new DateTime(now.Year, now.Month, 1);
         var startOfNextMonth = startOfMonth.AddMonths(1);
 
-        var appointments = _db.GetAllAppointments()
+        var appointments = _appointments.GetAllAppointments()
             .Where(a => a.RoomNumber == roomNumber &&
                        a.DateTime >= startOfMonth &&
                        a.DateTime < startOfNextMonth)

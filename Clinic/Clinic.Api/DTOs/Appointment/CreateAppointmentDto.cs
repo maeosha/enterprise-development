@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Clinic.Api.DTOs.Appointment;
 
 /// <summary>
@@ -11,30 +9,25 @@ public class CreateAppointmentDto
     /// <summary>
     /// The full name of the patient for the appointment.
     /// </summary>
-    [Required]
-    public string PatientFullName { get; set; } = null!;
+    public required string PatientFullName { get; set; }
 
     /// <summary>
     /// The full name of the doctor for the appointment.
     /// </summary>
-    [Required]
-    public string DoctorFullName { get; set; } = null!;
+    public required string DoctorFullName { get; set; }
 
     /// <summary>
     /// The date and time of the appointment.
     /// </summary>
-    [Required]
-    public DateTime DateTime { get; set; }
+    public required DateTime DateTime { get; set; }
 
     /// <summary>
     /// The room number where the appointment will take place.
     /// </summary>
-    [Required]
-    public int RoomNumber { get; set; }
+    public required int RoomNumber { get; set; }
 
     /// <summary>
     /// Indicates whether the appointment is a return visit.
     /// </summary>
-    [Required]
-    public bool IsReturnVisit { get; set; }
+    public required bool IsReturnVisit { get; set; }
 }

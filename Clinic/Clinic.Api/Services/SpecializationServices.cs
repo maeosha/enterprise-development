@@ -1,6 +1,6 @@
 using AutoMapper;
 using Clinic.Models.Entities;
-using Clinic.Api.DataBase;
+using Clinic.DataBase.Interfaces;
 using Clinic.Api.DTOs.SpecializationDto;
 using Clinic.Api.Interfaces.Services;
 
@@ -12,7 +12,7 @@ namespace Clinic.Api.Services;
 /// </summary>
 public class SpecializationServices : ISpecializationServices
 {
-    private readonly IClinicDataBase _db;
+    private readonly ISpecializationDataBase _db;
     private readonly IMapper _mapper;
     private int _specializationId;
 
@@ -22,7 +22,7 @@ public class SpecializationServices : ISpecializationServices
     /// </summary>
     /// <param name="db">The database service for specialization operations.</param>
     /// <param name="mapper">The AutoMapper instance used for object mapping.</param>
-    public SpecializationServices(IClinicDataBase db, IMapper mapper)
+    public SpecializationServices(ISpecializationDataBase db, IMapper mapper)
     {
         _db = db;
         _mapper = mapper;

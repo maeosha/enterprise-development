@@ -9,12 +9,48 @@ namespace Clinic.Api.DTOs.DoctorDto;
 /// </summary>
 public class UpdateDoctorDto
 {
-    public string? PassportNumber { get; set; }
+    /// <summary>
+    /// The unique identifier of the doctor.
+    /// </summary>
+    public int? Id { get; set; }
+
+    /// <summary>
+    /// The passport number of the doctor.
+    /// </summary>
+    public string? PassportNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The birth date of the doctor.
+    /// </summary>
     public DateOnly? BirthDate { get; set; }
-    public string? LastName { get; set; }
-    public string? FirstName { get; set; }
+
+    /// <summary>
+    /// The last name of the doctor.
+    /// </summary>
+    public string? LastName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The first name of the doctor.
+    /// </summary>
+    public string? FirstName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional: The patronymic (middle name) of the doctor.
+    /// </summary>
     public string? Patronymic { get; set; }
-    public Gender? Gender { get; set; }
-    public List<Specialization>? Specializations { get; set; } = null;
-    public int? ExperienceYears { get; set; }
+
+    /// <summary>
+    /// The gender of the doctor.
+    /// </summary>
+    public String? Gender { get; set; } = null!;
+
+    /// <summary>
+    /// The list of specializations for the doctor.
+    /// </summary>
+    public List<String>? Specializations { get; set; } = null!;
+
+    /// <summary>
+    /// The number of years of experience for the doctor.
+    /// </summary>
+    public int? ExperienceYears { get; set; } = null!;
 }

@@ -6,6 +6,9 @@ namespace Clinic.Api.DTOs.SpecializationDto;
 /// </summary>
 public class UpdateSpecializationDto
 {
+    /// <summary>
+    /// The new name of the specialization. Optional.
+    /// </summary>
     public string? Name { get; set; }
 }
 

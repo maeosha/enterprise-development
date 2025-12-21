@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using Clinic.Models.Entities;
+using Clinic.Api.DTOs.SpecializationDto;
 
 namespace Clinic.Api.DTOs.DoctorDto;
 
@@ -9,13 +9,48 @@ namespace Clinic.Api.DTOs.DoctorDto;
 /// </summary>
 public class CreateDoctorDto
 {
-    [Required]public string PassportNumber { get; set; } = null!;
-    [Required]public DateOnly BirthDate { get; set; }
-    [Required]public string LastName { get; set; } = null!;
-    [Required]public string FirstName { get; set; } = null!;
-    [Required]public string PhoneNumber { get; set; } = null!;
+    /// <summary>
+    /// Required: The passport number of the doctor.
+    /// </summary>
+    public required string PassportNumber { get; set; }
+
+    /// <summary>
+    /// Required: The birth date of the doctor.
+    /// </summary>
+    public required DateOnly BirthDate { get; set; }
+
+    /// <summary>
+    /// Required: The last name of the doctor.
+    /// </summary>
+    public required string LastName { get; set; }
+
+    /// <summary>
+    /// Required: The first name of the doctor.
+    /// </summary>
+    public required string FirstName { get; set; }
+
+    /// <summary>
+    /// Required: The phone number of the doctor.
+    /// </summary>
+    public required string PhoneNumber { get; set; }
+
+    /// <summary>
+    /// Optional: The patronymic (middle name) of the doctor.
+    /// </summary>
     public string? Patronymic { get; set; }
-    [Required]public String Gender { get; set; } = null!;
-    [Required]public List<Specialization> Specializations { get; set; } = null!;
-    [Required]public int ExperienceYears { get; set; }
+
+    /// <summary>
+    /// Required: The gender of the doctor.
+    /// </summary>
+    public required String Gender { get; set; }
+
+    /// <summary>
+    /// Required: The list of specializations for the doctor.
+    /// </summary>
+    public required List<CreateSpecializationDto> Specializations { get; set; }
+
+    /// <summary>
+    /// Required: The number of years of experience for the doctor.
+    /// </summary>
+    public required int ExperienceYears { get; set; }
 }
