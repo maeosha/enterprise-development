@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.DTOs.Specialization;
 using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Controllers;

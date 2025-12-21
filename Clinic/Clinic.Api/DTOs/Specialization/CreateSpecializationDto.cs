@@ -1,4 +1,4 @@
-namespace Clinic.Api.DTOs.SpecializationDto;
+namespace Clinic.Api.DTOs.Specialization;
 
 /// <summary>
 /// DTO for creating a new specialization, including required name.

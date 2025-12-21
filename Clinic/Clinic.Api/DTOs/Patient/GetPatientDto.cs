@@ -1,6 +1,4 @@
-using Clinic.Models.Enums;
-
-namespace Clinic.Api.DTOs.PatientDto;
+namespace Clinic.Api.DTOs.Patient;
 
 /// <summary>
 /// DTO for retrieving detailed information about a patient,

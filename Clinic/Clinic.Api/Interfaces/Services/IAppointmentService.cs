@@ -1,5 +1,4 @@
 using Clinic.Api.DTOs.Appointment;
-using Clinic.Api.Interfaces;
 
 namespace Clinic.Api.Interfaces.Services;
 

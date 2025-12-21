@@ -1,6 +1,6 @@
 using Clinic.Models.Enums;
 
-namespace Clinic.Api.DTOs.PatientDto;
+namespace Clinic.Api.DTOs.Patient;
 
 /// <summary>
 /// DTO for updating an existing patient, including optional personal information,

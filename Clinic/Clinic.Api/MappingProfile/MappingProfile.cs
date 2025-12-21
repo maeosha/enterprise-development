@@ -1,7 +1,7 @@
 using AutoMapper;
-using Clinic.Api.DTOs.PatientDto;
-using Clinic.Api.DTOs.DoctorDto;
-using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.DTOs.Patient;
+using Clinic.Api.DTOs.Doctor;
+using Clinic.Api.DTOs.Specialization;
 using Clinic.Api.DTOs.Appointment;
 using Clinic.Models.Enums;
 using Clinic.Models.Entities;

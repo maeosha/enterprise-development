@@ -1,6 +1,6 @@
 using AutoMapper;
 using Clinic.DataBase.Interfaces;
-using Clinic.Api.DTOs.PatientDto;
+using Clinic.Api.DTOs.Patient;
 using Clinic.Models.Entities;
 using Clinic.Api.Interfaces.Services;
 

@@ -1,4 +1,4 @@
-using Clinic.Api.DTOs.PatientDto;
+using Clinic.Api.DTOs.Patient;
 
 namespace Clinic.Api.Interfaces.Services;
 

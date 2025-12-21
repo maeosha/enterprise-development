@@ -1,7 +1,7 @@
 using AutoMapper;
 using Clinic.Models.Entities;
 using Clinic.DataBase.Interfaces;
-using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.DTOs.Specialization;
 using Clinic.Api.Interfaces.Services;
 
 namespace Clinic.Api.Services;

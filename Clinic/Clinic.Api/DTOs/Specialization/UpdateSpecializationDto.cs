@@ -1,4 +1,4 @@
-namespace Clinic.Api.DTOs.SpecializationDto;
+namespace Clinic.Api.DTOs.Specialization;
 
 /// <summary>
 /// DTO for updating an existing specialization.

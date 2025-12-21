@@ -1,16 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using Clinic.DataBase;
 using Clinic.Api.Services;
-using Clinic.Models.Entities;
-using Clinic.Models.Enums;
-using Microsoft.AspNetCore.Http;
+
 
 namespace Clinic.Tests;
-
-/// <summary>
-/// Базовый класс для тестирования Entity Framework контекста с InMemory Database
-/// </summary>
-public abstract class DatabaseTestBase(AnalyticsServices testServices) : IClassFixture<ClinicDbContext>
+public abstract class ClinicTests(AnalyticsServices testServices) : IClassFixture<ClinicDbContext>
 {
     [Fact]
     public void GetDoctorsWithExperience_WhenExperienceAtLeast10Years_ReturnsExperiencedDoctorsOrderedByName()

@@ -1,4 +1,4 @@
-namespace Clinic.Api.DTOs.PatientDto;
+namespace Clinic.Api.DTOs.Patient;
 
 /// <summary>
 /// DTO for creating a new patient, including required personal information,

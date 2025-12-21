@@ -1,7 +1,6 @@
-using Clinic.Models.Entities;
-using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.DTOs.Specialization;
 
-namespace Clinic.Api.DTOs.DoctorDto;
+namespace Clinic.Api.DTOs.Doctor;
 
 /// <summary>
 /// DTO for creating a new doctor, including required personal information,

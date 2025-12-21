@@ -1,4 +1,4 @@
-using Clinic.Api.DTOs.SpecializationDto;
+using Clinic.Api.DTOs.Specialization;
 
 namespace Clinic.Api.Interfaces.Services;
 

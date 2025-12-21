@@ -1,7 +1,7 @@
 using AutoMapper;
 using Clinic.DataBase.Interfaces;
-using Clinic.Api.DTOs.PatientDto;
-using Clinic.Api.DTOs.DoctorDto;
+using Clinic.Api.DTOs.Patient;
+using Clinic.Api.DTOs.Doctor;
 using Clinic.Api.DTOs.Appointment;
 
 namespace Clinic.Api.Services;

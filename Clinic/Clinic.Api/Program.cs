@@ -2,12 +2,15 @@ using Clinic.DataBase;
 using Clinic.DataBase.Interfaces;
 using Clinic.DataBase.EntityFramework;
 using Clinic.Api.MappingProfile;
+using Microsoft.Extensions.Hosting;
 using Clinic.Api.Services;
 using Clinic.Api.Converter;
 using Clinic.Api.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -24,7 +27,6 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
 
 builder.Services.AddDbContext<ClinicDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
-
 
 builder.Services.AddScoped<IPatientDataBase, EfPatientDataBase>();
 builder.Services.AddScoped<IDoctorDataBase, EfDoctorDataBase>();

@@ -1,5 +1,4 @@
-using Clinic.Models.Entities;
-namespace Clinic.Api.DTOs.DoctorDto;
+namespace Clinic.Api.DTOs.Doctor;
 
 /// <summary>
 /// DTO for retrieving detailed information about a doctor,

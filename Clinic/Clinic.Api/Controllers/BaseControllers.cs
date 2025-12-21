@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Clinic.Api.Interfaces.Services;
-using Clinic.Api.Services;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Clinic.Api.Controllers;
 

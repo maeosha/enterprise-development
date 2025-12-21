@@ -1,7 +1,4 @@
-using Clinic.Models.Entities;
-using Clinic.Models.Enums;
-
-namespace Clinic.Api.DTOs.DoctorDto;
+namespace Clinic.Api.DTOs.Doctor;
 
 /// <summary>
 /// DTO for updating an existing doctor, including optional personal information,
