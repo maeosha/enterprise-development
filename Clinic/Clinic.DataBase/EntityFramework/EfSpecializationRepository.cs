@@ -1,22 +1,22 @@
 using Clinic.Models.Entities;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.DataBase.EntityFramework;
 
 /// <summary>
-/// Entity Framework implementation of <see cref="ISpecializationDataBase"/> that manages
+/// Entity Framework implementation of <see cref="ISpecializationRepository"/> that manages
 /// specialization entities using <see cref="ClinicDbContext"/>.
 /// </summary>
-public sealed class EfSpecializationDataBase : ISpecializationDataBase
+public sealed class EfSpecializationRepository : ISpecializationRepository
 {
     private readonly ClinicDbContext _context;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EfSpecializationDataBase"/> class.
+    /// Initializes a new instance of the <see cref="EfSpecializationRepository"/> class.
     /// </summary>
     /// <param name="context">The database context used for data access.</param>
-    public EfSpecializationDataBase(ClinicDbContext context)
+    public EfSpecializationRepository(ClinicDbContext context)
     {
         _context = context;
     }

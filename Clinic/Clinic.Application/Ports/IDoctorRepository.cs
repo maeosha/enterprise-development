@@ -1,12 +1,12 @@
 using Clinic.Models.Entities;
 
-namespace Clinic.DataBase.Interfaces;
+namespace Clinic.Application.Ports;
 
 /// <summary>
 /// Abstraction for doctor persistence operations.
 /// Implementations should provide CRUD operations for doctor entities.
 /// </summary>
-public interface IDoctorDataBase
+public interface IDoctorRepository
 {
     /// <summary>
     /// Retrieves a doctor by identifier, or <c>null</c> if not found.

@@ -1,22 +1,22 @@
 using Clinic.Models.Entities;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.DataBase.EntityFramework;
 
 /// <summary>
-/// Entity Framework implementation of <see cref="IAppointmentDataBase"/> that manages
+/// Entity Framework implementation of <see cref="IAppointmentRepository"/> that manages
 /// appointment entities using a <see cref="ClinicDbContext"/>.
 /// </summary>
-public sealed class EfAppointmentDataBase : IAppointmentDataBase
+public sealed class EfAppointmentRepository : IAppointmentRepository
 {
     private readonly ClinicDbContext _context;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EfAppointmentDataBase"/> class.
+    /// Initializes a new instance of the <see cref="EfAppointmentRepository"/> class.
     /// </summary>
     /// <param name="context">The database context used for data access.</param>
-    public EfAppointmentDataBase(ClinicDbContext context)
+    public EfAppointmentRepository(ClinicDbContext context)
     {
         _context = context;
     }

@@ -1,5 +1,5 @@
 using AutoMapper;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Clinic.Api.DTOs.Patient;
 using Clinic.Api.DTOs.Doctor;
 using Clinic.Api.DTOs.Appointment;
@@ -8,15 +8,15 @@ namespace Clinic.Api.Services;
 
 public class AnalyticsServices
 {
-    private readonly IPatientDataBase _patients;
-    private readonly IDoctorDataBase _doctors;
-    private readonly IAppointmentDataBase _appointments;
+    private readonly IPatientRepository _patients;
+    private readonly IDoctorRepository _doctors;
+    private readonly IAppointmentRepository _appointments;
     private readonly IMapper _mapper;
-    
+
     public AnalyticsServices(
-        IPatientDataBase patients,
-        IDoctorDataBase doctors,
-        IAppointmentDataBase appointments,
+        IPatientRepository patients,
+        IDoctorRepository doctors,
+        IAppointmentRepository appointments,
         IMapper mapper)
     {
         _patients = patients;

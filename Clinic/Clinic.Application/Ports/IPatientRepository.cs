@@ -1,12 +1,12 @@
 using Clinic.Models.Entities;
 
-namespace Clinic.DataBase.Interfaces;
+namespace Clinic.Application.Ports;
 
 /// <summary>
 /// Abstraction for patient persistence operations.
 /// Implementations should provide methods to get, add, update and remove patients.
 /// </summary>
-public interface IPatientDataBase
+public interface IPatientRepository
 {
     /// <summary>
     /// Retrieves a patient by identifier.

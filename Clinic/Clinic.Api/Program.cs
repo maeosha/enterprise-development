@@ -1,5 +1,5 @@
 using Clinic.DataBase;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Clinic.DataBase.EntityFramework;
 using Clinic.Api.MappingProfile;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +16,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new DateConverter());
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; 
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
 
@@ -28,10 +28,10 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
 builder.Services.AddDbContext<ClinicDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-builder.Services.AddScoped<IPatientDataBase, EfPatientDataBase>();
-builder.Services.AddScoped<IDoctorDataBase, EfDoctorDataBase>();
-builder.Services.AddScoped<ISpecializationDataBase, EfSpecializationDataBase>();
-builder.Services.AddScoped<IAppointmentDataBase, EfAppointmentDataBase>();
+builder.Services.AddScoped<IPatientRepository, EfPatientRepository>();
+builder.Services.AddScoped<IDoctorRepository, EfDoctorRepository>();
+builder.Services.AddScoped<ISpecializationRepository, EfSpecializationRepository>();
+builder.Services.AddScoped<IAppointmentRepository, EfAppointmentRepository>();
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
 builder.Services.AddEndpointsApiExplorer();

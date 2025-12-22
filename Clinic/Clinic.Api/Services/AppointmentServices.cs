@@ -1,5 +1,5 @@
 using AutoMapper;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Clinic.Api.DTOs.Appointment;
 using Clinic.Models.Entities;
 using Clinic.Api.Interfaces.Services;
@@ -13,9 +13,9 @@ namespace Clinic.Api.Services;
 /// </summary>
 public class AppointmentServices : IAppointmentServices
 {
-    private readonly IAppointmentDataBase _appointments;
-    private readonly IPatientDataBase _patients;
-    private readonly IDoctorDataBase _doctors;
+    private readonly IAppointmentRepository _appointments;
+    private readonly IPatientRepository _patients;
+    private readonly IDoctorRepository _doctors;
     private readonly IMapper _mapper;
     private int _appointmentId;
 
@@ -27,9 +27,9 @@ public class AppointmentServices : IAppointmentServices
     /// <param name="doctors">The doctor database interface.</param>
     /// <param name="mapper">The AutoMapper interface for DTO and entity mapping.</param>
     public AppointmentServices(
-        IAppointmentDataBase appointments,
-        IPatientDataBase patients,
-        IDoctorDataBase doctors,
+        IAppointmentRepository appointments,
+        IPatientRepository patients,
+        IDoctorRepository doctors,
         IMapper mapper)
     {
         _appointments = appointments;

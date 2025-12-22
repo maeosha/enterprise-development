@@ -1,22 +1,22 @@
 using Clinic.Models.Entities;
-using Clinic.DataBase.Interfaces;
+using Clinic.Application.Ports;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clinic.DataBase.EntityFramework;
 
 /// <summary>
-/// Entity Framework implementation of <see cref="IPatientDataBase"/> that manages
+/// Entity Framework implementation of <see cref="IPatientRepository"/> that manages
 /// patient entities using a <see cref="ClinicDbContext"/>.
 /// </summary>
-public sealed class EfPatientDataBase : IPatientDataBase
+public sealed class EfPatientRepository : IPatientRepository
 {
     private readonly ClinicDbContext _context;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EfPatientDataBase"/> class.
+    /// Initializes a new instance of the <see cref="EfPatientRepository"/> class.
     /// </summary>
     /// <param name="context">The database context used for data access.</param>
-    public EfPatientDataBase(ClinicDbContext context)
+    public EfPatientRepository(ClinicDbContext context)
     {
         _context = context;
     }

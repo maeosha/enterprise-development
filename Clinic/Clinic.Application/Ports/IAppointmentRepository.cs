@@ -1,12 +1,12 @@
 using Clinic.Models.Entities;
 
-namespace Clinic.DataBase.Interfaces;
+namespace Clinic.Application.Ports;
 
 /// <summary>
 /// Abstraction for appointment persistence operations.
 /// Provides methods to query and modify appointments in the data store.
 /// </summary>
-public interface IAppointmentDataBase
+public interface IAppointmentRepository
 {
     /// <summary>
     /// Retrieves an appointment by identifier.

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.AppHost", "Clinic.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.ServiceDefaults", "Clinic.ServiceDefaults\Clinic.ServiceDefaults.csproj", "{472C1C25-CCA0-4AA2-910C-150DD406AE5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.Application", "Clinic.Application\Clinic.Application.csproj", "{43A97106-90F1-4FC0-B66E-1D6DA5950260}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{472C1C25-CCA0-4AA2-910C-150DD406AE5F}.Release|x64.Build.0 = Release|Any CPU
 		{472C1C25-CCA0-4AA2-910C-150DD406AE5F}.Release|x86.ActiveCfg = Release|Any CPU
 		{472C1C25-CCA0-4AA2-910C-150DD406AE5F}.Release|x86.Build.0 = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|x64.Build.0 = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Debug|x86.Build.0 = Debug|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x64.ActiveCfg = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x64.Build.0 = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x86.ActiveCfg = Release|Any CPU
+		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

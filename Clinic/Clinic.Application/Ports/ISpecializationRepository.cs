@@ -1,12 +1,12 @@
 using Clinic.Models.Entities;
 
-namespace Clinic.DataBase.Interfaces;
+namespace Clinic.Application.Ports;
 
 /// <summary>
 /// Abstraction for specialization persistence operations.
 /// Provides methods to query and modify specializations.
 /// </summary>
-public interface ISpecializationDataBase
+public interface ISpecializationRepository
 {
     /// <summary>
     /// Returns all specializations.
