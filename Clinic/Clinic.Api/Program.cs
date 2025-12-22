@@ -23,10 +23,8 @@ builder.Services.AddControllers()
 var connectionString = builder.Configuration.GetConnectionString("ClinicDb")
                        ?? throw new InvalidOperationException("Connection string 'ClinicDb' is not configured.");
 
-var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
-
 builder.Services.AddDbContext<ClinicDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IPatientRepository, EfPatientRepository>();
 builder.Services.AddScoped<IDoctorRepository, EfDoctorRepository>();

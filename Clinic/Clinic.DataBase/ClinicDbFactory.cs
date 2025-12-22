@@ -31,9 +31,8 @@ public class ClinicDbFactory : IDesignTimeDbContextFactory<ClinicDbContext>
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<ClinicDbContext>();
-        optionsBuilder.UseMySql(
-            connectionString,
-            ServerVersion.AutoDetect(connectionString)
+        optionsBuilder.UseNpgsql(
+            connectionString
         );
 
         return new ClinicDbContext(optionsBuilder.Options);
