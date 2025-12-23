@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.ServiceDefaults", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.Application", "Clinic.Application\Clinic.Application.csproj", "{43A97106-90F1-4FC0-B66E-1D6DA5950260}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.InMemory", "Clinic.InMemory\Clinic.InMemory.csproj", "{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,18 @@ Global
 		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x64.Build.0 = Release|Any CPU
 		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x86.ActiveCfg = Release|Any CPU
 		{43A97106-90F1-4FC0-B66E-1D6DA5950260}.Release|x86.Build.0 = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|x64.Build.0 = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Debug|x86.Build.0 = Debug|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|x64.ActiveCfg = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|x64.Build.0 = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|x86.ActiveCfg = Release|Any CPU
+		{C77BBDCF-DF57-404C-B821-9DA7E6C06AD7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
