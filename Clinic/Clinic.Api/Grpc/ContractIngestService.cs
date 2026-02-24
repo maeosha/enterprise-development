@@ -55,12 +55,6 @@ public class ContractIngestService : ContractIngestor.ContractIngestorBase
                 if (_appointments.AddAppointment(appointment))
                 {
                     saved++;
-                    _logger.LogInformation(
-                        "Appointment added from stream. AppointmentId: {AppointmentId}, PatientId: {PatientId}, DoctorId: {DoctorId}, DateTime: {DateTime}",
-                        appointment.Id,
-                        appointment.PatientId,
-                        appointment.DoctorId,
-                        appointment.DateTime);
                 }
                 else
                 {

@@ -2,7 +2,19 @@ using System.Globalization;
 using Clinic.Contracts;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
+using Microsoft.Extensions.Logging;
+
+using var loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder
+        .SetMinimumLevel(LogLevel.Information)
+        .AddSimpleConsole(options =>
+        {
+            options.SingleLine = true;
+            options.TimestampFormat = "HH:mm:ss ";
+        });
+});
+var logger = loggerFactory.CreateLogger("Clinic.AppointmentGenerator");
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true)
@@ -12,7 +24,7 @@ var configuration = new ConfigurationBuilder()
 var endpoint = configuration["Grpc:Endpoint"];
 if (string.IsNullOrWhiteSpace(endpoint))
 {
-    Console.Error.WriteLine("Missing Grpc:Endpoint configuration.");
+    logger.LogError("Missing Grpc:Endpoint configuration.");
     return 1;
 }
 
@@ -23,107 +35,53 @@ if (endpoint.Contains("clinic-api", StringComparison.OrdinalIgnoreCase))
     endpoint = aspireHttpsEndpoint ?? aspireHttpEndpoint ?? endpoint;
 }
 
-var connectionString = configuration.GetConnectionString("ClinicDb");
-if (string.IsNullOrWhiteSpace(connectionString))
-{
-    Console.Error.WriteLine("Missing ConnectionStrings:ClinicDb configuration.");
-    return 1;
-}
-
 if (endpoint.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
 {
+    logger.LogWarning("Using insecure gRPC endpoint {Endpoint}. Enabling Http2UnencryptedSupport.", endpoint);
     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 }
 
 var count = configuration.GetValue("Generator:Count", 10);
 var roomNumbers = configuration.GetSection("Generator:RoomNumbers").Get<int[]>() ?? [101, 102, 201, 202];
+var patients = configuration.GetSection("Generator:Patients").Get<PersonSeed[]>() ??
+[
+    new PersonSeed(1, "Иванов Иван Иванович"),
+    new PersonSeed(2, "Петров Петр Петрович"),
+    new PersonSeed(3, "Сидорова Мария Алексеевна")
+];
+var doctors = configuration.GetSection("Generator:Doctors").Get<PersonSeed[]>() ??
+[
+    new PersonSeed(1, "Смирнов Алексей Николаевич"),
+    new PersonSeed(2, "Кузнецова Елена Сергеевна"),
+    new PersonSeed(3, "Волков Дмитрий Олегович")
+];
 
-var patients = new List<(int Id, string FullName)>();
-var doctors = new List<(int Id, string FullName)>();
 var knownVisitPairs = new HashSet<(int PatientId, int DoctorId)>();
-
-const int maxAttempts = 20;
-
-// Attempt to read patients, doctors and known visit pairs with retry logic for database readiness.
-for (var attempt = 1; attempt <= maxAttempts; attempt++)
-{
-    try
-    {
-        patients.Clear();
-        doctors.Clear();
-        knownVisitPairs.Clear();
-
-        await using var connection = new NpgsqlConnection(connectionString);
-        await connection.OpenAsync();
-
-        await using (var command = new NpgsqlCommand("SELECT \"Id\", \"LastName\", \"FirstName\", \"Patronymic\" FROM \"Patients\"", connection))
-        await using (var reader = await command.ExecuteReaderAsync())
-        {
-            while (await reader.ReadAsync())
-            {
-                var id = reader.GetInt32(0);
-                var lastName = reader.GetString(1);
-                var firstName = reader.GetString(2);
-                var patronymic = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
-                var fullName = BuildFullName(lastName, firstName, patronymic);
-                patients.Add((id, fullName));
-            }
-        }
-
-        await using (var command = new NpgsqlCommand("SELECT \"Id\", \"LastName\", \"FirstName\", \"Patronymic\" FROM \"Doctors\"", connection))
-        await using (var reader = await command.ExecuteReaderAsync())
-        {
-            while (await reader.ReadAsync())
-            {
-                var id = reader.GetInt32(0);
-                var lastName = reader.GetString(1);
-                var firstName = reader.GetString(2);
-                var patronymic = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
-                var fullName = BuildFullName(lastName, firstName, patronymic);
-                doctors.Add((id, fullName));
-            }
-        }
-
-        await using (var command = new NpgsqlCommand("SELECT DISTINCT \"PatientId\", \"DoctorId\" FROM \"Appointments\"", connection))
-        await using (var reader = await command.ExecuteReaderAsync())
-        {
-            while (await reader.ReadAsync())
-            {
-                knownVisitPairs.Add((reader.GetInt32(0), reader.GetInt32(1)));
-            }
-        }
-
-        break;
-    }
-    catch (PostgresException ex) when (ex.SqlState == "42P01" && attempt < maxAttempts)
-    {
-        Console.WriteLine($"Database schema is not ready yet (attempt {attempt}/{maxAttempts}). Retrying...");
-        await Task.Delay(TimeSpan.FromSeconds(2));
-    }
-    catch (NpgsqlException) when (attempt < maxAttempts)
-    {
-        Console.WriteLine($"Database is not ready yet (attempt {attempt}/{maxAttempts}). Retrying...");
-        await Task.Delay(TimeSpan.FromSeconds(2));
-    }
-}
 
 if (count <= 0)
 {
-    Console.Error.WriteLine("Generator:Count must be greater than 0.");
+    logger.LogError("Generator:Count must be greater than 0.");
     return 1;
 }
 
 if (roomNumbers.Length == 0)
 {
-    Console.Error.WriteLine("Generator:RoomNumbers is empty.");
+    logger.LogError("Generator:RoomNumbers is empty.");
     return 1;
 }
 
-if (patients.Count == 0 || doctors.Count == 0)
+if (patients.Length == 0 || doctors.Length == 0)
 {
-    Console.Error.WriteLine("No patients or doctors found in the database after retries.");
+    logger.LogError("Generator:Patients and Generator:Doctors must contain at least one item.");
     return 1;
 }
+
+logger.LogInformation(
+    "Generator started. Endpoint={Endpoint}; Count={Count}; Patients={PatientsCount}; Doctors={DoctorsCount}.",
+    endpoint,
+    count,
+    patients.Length,
+    doctors.Length);
 
 //Create gRPC channel and client, then send generated contracts with retry logic for endpoint availability.
 const int grpcAttempts = 10;
@@ -139,47 +97,42 @@ for (var attempt = 1; attempt <= grpcAttempts; attempt++)
 
         for (var i = 0; i < count; i++)
         {
-            var patient = patients[random.Next(patients.Count)];
-            var doctor = doctors[random.Next(doctors.Count)];
+            var patient = patients[random.Next(patients.Length)];
+            var doctor = doctors[random.Next(doctors.Length)];
             var contract = BuildRandomContract(patient, doctor, roomNumbers, random, knownVisitPairs);
 
             await call.RequestStream.WriteAsync(contract);
+            logger.LogInformation(
+                "Sent contract {Index}/{Total}: PatientId={PatientId}; DoctorId={DoctorId}; Room={Room}; IsReturnVisit={IsReturnVisit}; Time={Time}.",
+                i + 1,
+                count,
+                contract.PatientId,
+                contract.DoctorId,
+                contract.RoomNumber,
+                contract.IsReturnVisit,
+                contract.AppointmentTime);
         }
 
         await call.RequestStream.CompleteAsync();
 
         var result = await call;
-        Console.WriteLine($"Received={result.Received} Saved={result.Saved} Failed={result.Failed}");
+        logger.LogInformation("Ingest result: Received={Received}; Saved={Saved}; Failed={Failed}.", result.Received, result.Saved, result.Failed);
         foreach (var error in result.Errors)
         {
-            Console.WriteLine(error);
+            logger.LogWarning("Ingest error: {Error}", error);
         }
 
         return 0;
     }
     catch (Grpc.Core.RpcException ex) when (ex.StatusCode == Grpc.Core.StatusCode.Unavailable && attempt < grpcAttempts)
     {
-        Console.WriteLine($"gRPC endpoint is not ready yet (attempt {attempt}/{grpcAttempts}). Retrying...");
+        logger.LogWarning("gRPC endpoint is not ready yet (attempt {Attempt}/{MaxAttempts}). Retrying...", attempt, grpcAttempts);
         await Task.Delay(TimeSpan.FromSeconds(2));
     }
 }
 
-Console.Error.WriteLine("Failed to send contracts to gRPC endpoint after retries.");
+logger.LogError("Failed to send contracts to gRPC endpoint after retries.");
 return 1;
-
-/// <summary>
-/// Builds a full name from separate name parts.
-/// </summary>
-/// <param name="lastName">Person last name.</param>
-/// <param name="firstName">Person first name.</param>
-/// <param name="patronymic">Optional middle name.</param>
-/// <returns>Concatenated full name without extra whitespace.</returns>
-static string BuildFullName(string lastName, string firstName, string? patronymic)
-{
-    return string.IsNullOrWhiteSpace(patronymic)
-        ? $"{lastName} {firstName}"
-        : $"{lastName} {firstName} {patronymic}";
-}
 
 /// <summary>
 /// Creates a randomized appointment contract for gRPC streaming.
@@ -191,8 +144,8 @@ static string BuildFullName(string lastName, string firstName, string? patronymi
 /// <param name="knownVisitPairs">Known patient-doctor pairs that already had visits.</param>
 /// <returns>Prepared <see cref="Contract"/> with randomized date and flags.</returns>
 static Contract BuildRandomContract(
-    (int Id, string FullName) patient,
-    (int Id, string FullName) doctor,
+    PersonSeed patient,
+    PersonSeed doctor,
     int[] roomNumbers,
     Random random,
     HashSet<(int PatientId, int DoctorId)> knownVisitPairs)
@@ -218,3 +171,10 @@ static Contract BuildRandomContract(
         IsReturnVisit = isReturnVisit
     };
 }
+
+/// <summary>
+/// Seed entity used by the autonomous generator to avoid direct database dependency.
+/// </summary>
+/// <param name="Id">Domain identifier used in generated contracts.</param>
+/// <param name="FullName">Full name included in generated contracts.</param>
+readonly record struct PersonSeed(int Id, string FullName);
