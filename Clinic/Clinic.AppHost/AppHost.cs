@@ -8,7 +8,7 @@ var api = builder.AddProject("clinic-api", "../Clinic.Api/Clinic.Api.csproj")
     .WaitFor(postgresql)
     .WithExternalHttpEndpoints();
 
-var appiontmentGenerator = builder.AddProject("clinic-appiontment-generator", "../Clinic.AppiontmentGenerator/Clinic.AppiontmentGenerator.csproj")
+var appointmentGenerator = builder.AddProject("clinic-appointment-generator", "../Clinic.AppointmentGenerator/Clinic.AppointmentGenerator.csproj")
     .WithReference(postgresql)
     .WithReference(api)
     .WaitFor(postgresql)

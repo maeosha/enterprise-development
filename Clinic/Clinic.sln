@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.InMemory", "Clinic.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.Contracts", "Clinic.Contracts\Clinic.Contracts.csproj", "{A17E9A18-4BE4-4C25-88F8-3E0B6C264B55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.AppiontmentGenerator", "Clinic.AppiontmentGenerator\Clinic.AppiontmentGenerator.csproj", "{8D7E3ED3-6C45-4A9F-8C09-A0F4D50F1B9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.AppointmentGenerator", "Clinic.AppointmentGenerator\Clinic.AppointmentGenerator.csproj", "{8D7E3ED3-6C45-4A9F-8C09-A0F4D50F1B9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinic.Application.Services", "Clinic.Application.Services\Clinic.Application.Services.csproj", "{E53E900D-1022-490F-B559-E74774E27FE3}"
 EndProject
