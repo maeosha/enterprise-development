@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Clinic.Models\Clinic.Models.csproj" />
-    <ProjectReference Include="..\Clinic.Api\Clinic.Api.csproj" />
+    <ProjectReference Include="..\Clinic.Application\Clinic.Application.csproj" />
   </ItemGroup>
 
 </Project>

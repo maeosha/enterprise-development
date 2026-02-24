@@ -3,19 +3,23 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.64.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Clinic.Models\Clinic.Models.csproj" />
     <ProjectReference Include="..\Clinic.Application\Clinic.Application.csproj" />
+    <ProjectReference Include="..\Clinic.Application.Services\Clinic.Application.Services.csproj" />
     <ProjectReference Include="..\Clinic.DataBase\Clinic.DataBase.csproj" />
-    <ProjectReference Include="..\Clinic.ServiceDefaults\Clinic.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Clinic.Contracts\Clinic.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

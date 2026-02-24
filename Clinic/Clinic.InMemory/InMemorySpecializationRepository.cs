@@ -1,7 +1,8 @@
+using Clinic.Application.Ports;
 using Clinic.Models.Entities;
 
 namespace Clinic.InMemory;
-public sealed class InMemorySpecializationRepository
+public sealed class InMemorySpecializationRepository : ISpecializationRepository
 {
     /// <summary>
     /// In-memory storage for specializations.

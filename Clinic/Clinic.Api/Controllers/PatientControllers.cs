@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.DTOs.Patient;
-using Clinic.Api.Interfaces.Services;
+using Clinic.Application.DTOs.Patient;
+using Clinic.Application.Interfaces.Services;
 
 namespace Clinic.Api.Controllers;
 
@@ -10,4 +10,4 @@ namespace Clinic.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/patients")]
-public class PatientControllers(IPatientServices patientServices) : BaseControllers<GetPatientDto, CreatePatientDto, UpdatePatientDto>(patientServices);
+public class PatientControllers(IPatientServices patientServices) : BaseControllers<GetPatientDto, CreateUpdatePatientDto>(patientServices);

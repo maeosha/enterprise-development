@@ -1,5 +1,5 @@
 using Clinic.DataBase;
-using Clinic.Api.Services;
+using Clinic.Application.Services;
 
 
 namespace Clinic.Tests;
@@ -19,7 +19,9 @@ public abstract class ClinicTests(AnalyticsServices testServices) : IClassFixtur
         var doctorId = 3;
         var patientsByDoctor = new List<int> {3};
 
-        var result = testServices.GetPatientsByDoctorOrderedByFullName(doctorId).Select(p => p.Id);
+        var patients = testServices.GetPatientsByDoctorOrderedByFullName(doctorId);
+        Assert.NotNull(patients);
+        var result = patients!.Select(p => p.Id);
         Assert.Equal(patientsByDoctor, result);
     }
 

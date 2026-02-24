@@ -1,7 +1,8 @@
+using Clinic.Application.Ports;
 using Clinic.Models.Entities;
 
 namespace Clinic.InMemory;
-public sealed class InMemoryAppointmentRepository
+public sealed class InMemoryAppointmentRepository : IAppointmentRepository
 {
     /// <summary>
     /// In-memory storage for appointments.
@@ -13,7 +14,7 @@ public sealed class InMemoryAppointmentRepository
     /// </summary>
     /// <param name="Id">The ID of the appointment to retrieve.</param>
     /// <returns>The appointment with the specified ID, or null if not found.</returns>
-    public Appointment? GetAppointment(int Id) => _appointments.GetValueOrDefault(Id);
+    public Appointment? GetAppointment(int id) => _appointments.GetValueOrDefault(id);
 
     /// <summary>
     /// Retrieves all appointments from the in-memory storage.
@@ -26,16 +27,16 @@ public sealed class InMemoryAppointmentRepository
     /// </summary>
     /// <param name="Id">The ID of the doctor.</param>
     /// <returns>A read-only collection of appointments for the specified doctor.</returns>
-    public IReadOnlyCollection<Appointment> GetAppointmentsByDoctor(int Id) =>
-        _appointments.Values.Where(a => a.DoctorId == Id).ToList();
+    public IReadOnlyCollection<Appointment> GetAppointmentsByDoctor(int doctorId) =>
+        _appointments.Values.Where(a => a.DoctorId == doctorId).ToList();
 
     /// <summary>
     /// Retrieves all appointments associated with a specific patient.
     /// </summary>
     /// <param name="Id">The ID of the patient.</param>
     /// <returns>A read-only collection of appointments for the specified patient.</returns>
-    public IReadOnlyCollection<Appointment> GetAppointmentsByPatient(int Id) =>
-        _appointments.Values.Where(a => a.PatientId == Id).ToList();
+    public IReadOnlyCollection<Appointment> GetAppointmentsByPatient(int patientId) =>
+        _appointments.Values.Where(a => a.PatientId == patientId).ToList();
 
     /// <summary>
     /// Adds a new appointment to the in-memory storage.
@@ -70,7 +71,7 @@ public sealed class InMemoryAppointmentRepository
     /// </summary>
     /// <param name="Id">The ID of the appointment to remove.</param>
     /// <returns>True if the appointment was successfully removed, false if it doesn't exist.</returns>
-    public bool RemoveAppointment(int Id) => _appointments.Remove(Id);
+    public bool RemoveAppointment(int id) => _appointments.Remove(id);
 
     /// <summary>
     /// Gets the count of appointments in the in-memory storage.

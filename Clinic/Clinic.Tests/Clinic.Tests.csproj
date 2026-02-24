@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Clinic.Models\Clinic.Models.csproj" />
     <ProjectReference Include="..\Clinic.Application\Clinic.Application.csproj" />
+    <ProjectReference Include="..\Clinic.Application.Services\Clinic.Application.Services.csproj" />
     <ProjectReference Include="..\Clinic.DataBase\Clinic.DataBase.csproj" />
     <ProjectReference Include="..\Clinic.Api\Clinic.Api.csproj" />
   </ItemGroup>

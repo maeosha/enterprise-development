@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.Services;
-using Clinic.Api.DTOs.Doctor;
-using Clinic.Api.DTOs.Patient;
-using Clinic.Api.DTOs.Appointment;
+using Clinic.Application.Services;
+using Clinic.Application.DTOs.Doctor;
+using Clinic.Application.DTOs.Patient;
+using Clinic.Application.DTOs.Appointment;
 
 namespace Clinic.Api.Controllers;
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.DTOs.Specialization;
-using Clinic.Api.Interfaces.Services;
+using Clinic.Application.DTOs.Specialization;
+using Clinic.Application.Interfaces.Services;
 
 namespace Clinic.Api.Controllers;
 
@@ -10,4 +10,4 @@ namespace Clinic.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/specializations")]
-public class SpecializationControllers(ISpecializationServices specializationServices) : BaseControllers<GetSpecializationDto, CreateSpecializationDto, UpdateSpecializationDto>(specializationServices);
+public class SpecializationControllers(ISpecializationServices specializationServices) : BaseControllers<GetSpecializationDto, CreateUpdateSpecializationDto>(specializationServices);

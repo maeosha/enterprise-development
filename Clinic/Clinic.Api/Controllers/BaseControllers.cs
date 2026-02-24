@@ -1,20 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.Interfaces.Services;
+using Clinic.Application.Interfaces.Services;
 
 namespace Clinic.Api.Controllers;
 
 /// <summary>
 /// Base controller class that provides common CRUD operations for all controllers.
 /// </summary>
-/// <typeparam name="TEntity">Entity type for the controller.</typeparam>
 /// <typeparam name="TGetDto">DTO type for retrieving entity data.</typeparam>
-/// <typeparam name="TCreateDto">DTO type for creating a new entity.</typeparam>
-/// <typeparam name="TUpdateDto">DTO type for updating an existing entity.</typeparam>
-/// <typeparam name="TService">Service type that implements IBaseService.</typeparam>
-public class BaseControllers<TGetDto, TCreateDto, TUpdateDto>(IBaseServices<TGetDto, TCreateDto, TUpdateDto> Service) : ControllerBase
+/// <typeparam name="TSaveDto">DTO type for create and update operations.</typeparam>
+public class BaseControllers<TGetDto, TSaveDto>(IBaseServices<TGetDto, TSaveDto> Service) : ControllerBase
     where TGetDto : class
-    where TCreateDto : class
-    where TUpdateDto : class
+    where TSaveDto : class
 {
 
     /// <summary>
@@ -55,7 +51,7 @@ public class BaseControllers<TGetDto, TCreateDto, TUpdateDto>(IBaseServices<TGet
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public virtual ActionResult<TGetDto> Create(TCreateDto dto)
+    public virtual ActionResult<TGetDto> Create(TSaveDto dto)
     {
         var entity = Service.Create(dto);
         if (entity == null)
@@ -75,7 +71,7 @@ public class BaseControllers<TGetDto, TCreateDto, TUpdateDto>(IBaseServices<TGet
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public virtual ActionResult<TGetDto> Update(int id, TUpdateDto dto)
+    public virtual ActionResult<TGetDto> Update(int id, TSaveDto dto)
     {
         var entity = Service.Update(id, dto);
         if (entity == null)
@@ -128,4 +124,3 @@ public class BaseControllers<TGetDto, TCreateDto, TUpdateDto>(IBaseServices<TGet
         return 0;
     }
 }
-

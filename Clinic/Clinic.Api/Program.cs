@@ -1,16 +1,15 @@
 using Clinic.DataBase;
 using Clinic.Application.Ports;
 using Clinic.DataBase.EntityFramework;
-using Clinic.Api.MappingProfile;
+using Clinic.Application.Services.Mapping;
 using Microsoft.Extensions.Hosting;
-using Clinic.Api.Services;
+using Clinic.Application.Services;
 using Clinic.Api.Converter;
-using Clinic.Api.Interfaces.Services;
+using Clinic.Application.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
+using Clinic.Api.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.AddServiceDefaults();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -19,6 +18,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
+builder.Services.AddGrpc();
 
 var connectionString = builder.Configuration.GetConnectionString("ClinicDb")
                        ?? throw new InvalidOperationException("Connection string 'ClinicDb' is not configured.");
@@ -33,7 +33,12 @@ builder.Services.AddScoped<IAppointmentRepository, EfAppointmentRepository>();
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+});
 
 builder.Services.AddScoped<IPatientServices, PatientServices>();
 builder.Services.AddScoped<IDoctorServices, DoctorServices>();
@@ -60,5 +65,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MapGrpcService<ContractIngestService>();
 app.MapControllers();
 app.Run();

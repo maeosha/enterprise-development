@@ -1,12 +1,20 @@
+using Clinic.Application.Ports;
 using Clinic.Models.Entities;
 
 namespace Clinic.InMemory;
-public sealed class InMemoryPatientRepository
+public sealed class InMemoryPatientRepository : IPatientRepository
 {
     /// <summary>
     /// In-memory storage for patients.
     /// </summary>
     private readonly Dictionary<int, Patient> _patients = new();
+
+    /// <summary>
+    /// Retrieves a patient by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the patient to retrieve.</param>
+    /// <returns>The patient with the specified ID, or null if not found.</returns>
+    public Patient? GetPatient(int id) => _patients.GetValueOrDefault(id);
 
     /// <summary>
     /// Retrieves all patients from the in-memory storage.
@@ -46,7 +54,7 @@ public sealed class InMemoryPatientRepository
     /// </summary>
     /// <param name="Id">The ID of the patient to remove.</param>
     /// <returns>True if the patient was successfully removed, false if it doesn't exist.</returns>
-    public bool RemovePatient(int Id) => _patients.Remove(Id);
+    public bool RemovePatient(int id) => _patients.Remove(id);
 
     /// <summary>
     /// Gets the count of patients in the in-memory storage.

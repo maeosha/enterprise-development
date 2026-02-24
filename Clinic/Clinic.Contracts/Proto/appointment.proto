@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package clinic.contracts;
+
+option csharp_namespace = "Clinic.Contracts";
+
+message Contract {
+  int32 patient_id = 1;
+  string patient_full_name = 2;
+  int32 doctor_id = 3;
+  string doctor_full_name = 4;
+  string appointment_time = 5; // ISO-8601 string
+  int32 room_number = 6;
+  bool is_return_visit = 7;
+}
+
+message IngestResult {
+  int32 received = 1;
+  int32 saved = 2;
+  int32 failed = 3;
+  repeated string errors = 4;
+}
+
+service ContractIngestor {
+  rpc IngestContracts (stream Contract) returns (IngestResult);
+}

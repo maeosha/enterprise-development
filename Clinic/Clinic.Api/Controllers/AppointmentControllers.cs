@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Api.Interfaces.Services;
-using Clinic.Api.DTOs.Appointment;
+using Clinic.Application.Interfaces.Services;
+using Clinic.Application.DTOs.Appointment;
 
 namespace Clinic.Api.Controllers;
 
@@ -10,7 +10,7 @@ namespace Clinic.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/appointments")]
-public class AppointmentControllers(IAppointmentServices appointmentServices) : BaseControllers<GetAppointmentDto, CreateAppointmentDto, UpdateAppointmentDto>(appointmentServices)
+public class AppointmentControllers(IAppointmentServices appointmentServices) : BaseControllers<GetAppointmentDto, CreateUpdateAppointmentDto>(appointmentServices)
 {
     /// <summary>
     /// Gets all appointments for a specific doctor.

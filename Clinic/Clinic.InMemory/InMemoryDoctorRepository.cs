@@ -1,7 +1,8 @@
+using Clinic.Application.Ports;
 using Clinic.Models.Entities;
 
 namespace Clinic.InMemory;
-public sealed class InMemoryDoctorRepository
+public sealed class InMemoryDoctorRepository : IDoctorRepository
 {
     /// <summary>
     /// In-memory storage for doctors.
@@ -13,7 +14,7 @@ public sealed class InMemoryDoctorRepository
     /// </summary>
     /// <param name="Id">The ID of the doctor to retrieve.</param>
     /// <returns>The doctor with the specified ID, or null if not found.</returns>
-    public Doctor? GetDoctor(int Id) => _doctors.GetValueOrDefault(Id);
+    public Doctor? GetDoctor(int id) => _doctors.GetValueOrDefault(id);
 
     /// <summary>
     /// Retrieves all doctors from the in-memory storage.
@@ -52,7 +53,7 @@ public sealed class InMemoryDoctorRepository
     /// </summary>
     /// <param name="Id">The ID of the doctor to remove.</param>
     /// <returns>True if the doctor was successfully removed, false if it doesn't exist.</returns>
-    public bool RemoveDoctor(int Id) => _doctors.Remove(Id);
+    public bool RemoveDoctor(int id) => _doctors.Remove(id);
 
     /// <summary>
     /// Gets the count of doctors in the in-memory storage.
@@ -60,4 +61,3 @@ public sealed class InMemoryDoctorRepository
     /// <returns>The number of doctors.</returns>
     public int DoctorCount() => _doctors.Count();
 }
-
